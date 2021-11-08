@@ -17,6 +17,17 @@ paths:
           $ref: "#/components/parameters/locale"
         -
           $ref: "#/components/parameters/deviceType"
+      responses:
+        '200':
+          description: Ok response, with websocket url
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+
   /country/context:
     summary: Returns the users country code?
     get:

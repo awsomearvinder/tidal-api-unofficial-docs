@@ -1,0 +1,82 @@
+openapi: '3.0.2'
+info:
+  title: Tidal Desktop Unofficial Documentation
+  version: '0.1a'
+  description: "Unofficial documentation for the `desktop.tidal.com` url for tidal.
+    Can be used in order to navigate and browse around tidal."
+servers:
+  - url: https://desktop.tidal.com/v1
+paths:
+  /rt/connect:
+    summary: Unknown, serves a websocket url that is currently unused?
+    post:
+      parameters:
+        -
+          $ref: "#/components/parameters/countryCode"
+        -
+          $ref: "#/components/parameters/locale"
+        -
+          $ref: "#/components/parameters/deviceType"
+  /country/context:
+    summary: Returns the users country code?
+    get:
+      security: []
+      parameters:
+        - 
+          $ref: "#/components/parameters/x-tidal-token"
+        -
+          $ref: "#/components/parameters/countryCode"
+        -
+          $ref: "#/components/parameters/locale"
+        -
+          $ref: "#/components/parameters/deviceType"
+      responses:
+        '200':
+          description: user's country code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  countryCode:
+                      type: string
+  /ping:
+    summary: Sends back a 200 OK response.
+    get:
+      security: []
+      responses:
+        '200':
+          description: Ok
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      scheme: bearer
+      type: http
+  parameters:
+      countryCode:
+          name: countryCode
+          in: query
+          description: user's country code
+          schema:
+            type: string
+      locale:
+          name: locale
+          in: query 
+          description: user's locale 
+          schema:
+            type: string
+      deviceType:
+          name: deviceType
+          in: query 
+          description: user's device type, only DESKTOP is known currently.
+          schema:
+            type: string
+            enum: [DESKTOP]
+      x-tidal-token:
+        name: x-tidal-token
+        in: header
+        description: The user's tidal token
+        schema:
+          type: string

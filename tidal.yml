@@ -69,13 +69,15 @@ components:
       countryCode:
           name: countryCode
           in: query
-          description: user's country code
+          description: user's country code. This parameter is wierd, locally it always sends "WW"
+            however the country endpoint respounds something different, US for me. Changing it dosen't seem to do anything.
           schema:
             type: string
       locale:
           name: locale
           in: query 
-          description: user's locale 
+          description: The user's locale, e.g. en_US. I'm not as of yet sure what
+            all the available locales are.
           schema:
             type: string
       deviceType:

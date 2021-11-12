@@ -31,11 +31,10 @@ paths:
   /country/context:
     summary: Returns the users country code?
     get:
-      security: []
+      security:
+        - ApiKeyAuth: []
       parameters:
         - 
-          $ref: "#/components/parameters/x-tidal-token"
-        -
           $ref: "#/components/parameters/countryCode"
         -
           $ref: "#/components/parameters/locale"
@@ -65,6 +64,10 @@ components:
     bearerAuth:
       scheme: bearer
       type: http
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-tidal-token
   parameters:
       countryCode:
           name: countryCode

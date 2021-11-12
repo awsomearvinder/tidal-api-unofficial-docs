@@ -34,7 +34,7 @@ paths:
       security:
         - ApiKeyAuth: []
       parameters:
-        - 
+        -
           $ref: "#/components/parameters/countryCode"
         -
           $ref: "#/components/parameters/locale"
@@ -50,6 +50,20 @@ paths:
                 properties:
                   countryCode:
                       type: string
+  /pages/home:
+    summary: Get home page information.
+    get:
+      parameters:
+        -
+          $ref: "#/components/parameters/countryCode"
+        -
+          $ref: "#/components/parameters/locale"
+        -
+          $ref: "#/components/parameters/deviceType"
+      responses:
+        '200':
+          $ref: "#/components/responses/pages"
+
   /ping:
     summary: Sends back a 200 OK response.
     get:
@@ -68,6 +82,82 @@ components:
       type: apiKey
       in: header
       name: x-tidal-token
+  schemas:
+    # Need to remove once I have actual moduel types inserted.
+    cool_temporary: 
+      type: object
+    cool_temporary2: 
+      type: object
+    baseModule: 
+      type: object 
+      allOf:
+        - $ref: "#/components/schemas/baseObject"
+        - properties:
+            description:
+              type: string
+              description: description of the object I guess? Seems to always be empty to me.
+            preTitle: 
+              type: string 
+              description: Always seems to be null. Don't know yet.
+            showMore: 
+              type: string
+              description: Always null so far, not sure what this is.
+            width:
+              type: integer 
+              description:  Always seems to be 100.
+    baseObject:
+      type: object
+      required: 
+        - id 
+        - title
+      properties:
+        id:
+          type: string 
+          description: base64 encoded json object with identification information? pV and v properties, idk.
+        title:
+          type: string 
+          description: Title of whatever you're looking at.
+    modules:
+      type: array
+      items:
+        type: object
+        allOf: 
+          - $ref: "#/components/schemas/baseModule"
+          - oneOf:
+            - $ref: "#/components/schemas/cool_temporary"
+            - $ref: "#/components/schemas/cool_temporary2"
+            discriminator:
+              propertyName: type
+              mapping: 
+                tmp: "#/components/schemas/tmp"
+                tmp2: "#/components/schemas/tmp2"
+
+  responses: 
+    pages:
+      description: A page returned by the tidal desktop api.
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - rows 
+              - selfLink
+            allOf: 
+            - type: object
+              properties:
+                rows:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      modules:
+                        $ref: "#/components/schemas/modules"
+                selfLink:
+                  type: object
+                  description: "As of yet unknown, always null?"
+                  properties: {}
+            - $ref: "#/components/schemas/baseObject"
+
   parameters:
       countryCode:
           name: countryCode
